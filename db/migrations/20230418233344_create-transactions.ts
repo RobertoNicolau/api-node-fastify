@@ -2,13 +2,14 @@ import { Knex } from 'knex'
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('transactions', (table) => {
-    table.increments('id').primary()
+    table.uuid('id').primary()
     table.string('title').notNullable()
-    table.string('type').notNullable()
-    table.decimal('value').notNullable()
-    table.string('category').notNullable()
-    table.timestamp('created_at').defaultTo(knex.fn.now())
+    table.decimal('amount', 10, 2).notNullable()
+    table.timestamp('created_at').defaultTo(knex.fn.now()).notNullable()
+    table.timestamp('updated_at').defaultTo(knex.fn.now())
   })
 }
 
-export async function down(knex: Knex): Promise<void> {}
+export async function down(knex: Knex): Promise<void> {
+  await knex.schema.dropTable('transactions')
+}
